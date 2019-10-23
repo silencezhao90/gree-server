@@ -1,0 +1,27 @@
+version: '3.4'
+services:
+  db:
+    image: postgres
+    volumes:
+      - gree-postgres:/var/lib/postgresql/data
+
+  redis:
+    restart: always
+    image: redis:4
+
+  web:
+    restart: always
+    image: silencezhao90/gree:v1
+#    build: .
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8042:8042"
+    volumes:
+      - $PWD:/home/deploy/gree
+    command: ./run_web.sh
+
+volumes:
+  gree-postgres:
+    external: true
